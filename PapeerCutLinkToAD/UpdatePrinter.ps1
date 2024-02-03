@@ -1,9 +1,11 @@
+#PanRem 03/02/2024
+
 #on commence par update la data du serveur papercut.
-#étape non obligatoire car cela se fait tout les jour a minuit normalement.
+#Ã©tape non obligatoire car cela se fait tout les jour a minuit normalement.
 
 #chemin vers l'exe CLI de papercut
 $CLIpath = "C:\Program Files\PaperCut MF\server\bin\win\server-command.exe"
-#on créer un credential d'un compte de service qui aura le droit d'executer la commande sur la machine. il ne sert que pour l'update
+#on crÃ©er un credential d'un compte de service qui aura le droit d'executer la commande sur la machine. il ne sert que pour l'update
 $srvice = "pedago.local\srvscript"
 $PWord = ConvertTo-SecureString -String "password" -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $srvice, $PWord
@@ -51,17 +53,17 @@ foreach ($user in $users)
     #on envoie la requete
     $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Body $requestBody -ContentType 'text/xml'
 
-    #on récupère la réponse (code copieur)
+    #on rÃ©cupÃ¨re la rÃ©ponse (code copieur)
     $copieur = $response.methodResponse.params.param.value
 
-    #on modifie l'attribut AD "fax number" par le code récupéré
+    #on modifie l'attribut AD "fax number" par le code rÃ©cupÃ©rÃ©
     Set-AdUser -Identity $userName -Fax $copieur
 
 	#cette partie concerne KOXO uniquement
-	#koxo créer ses propres fichier pour chaque utilisateur et s'y réfère la plupart du temps (exemple jdoe.xml)
+	#koxo crÃ©er ses propres fichier pour chaque utilisateur et s'y rÃ©fÃ¨re la plupart du temps (exemple jdoe.xml)
 	#il faut donc modifier ces fichiers
     $path = "C:\Program Files\KoXo Dev\KoXoAdm\Data\Users\" #chemin vers les fiches users
-	#on construit le chemin de celle qui nous intéresse ici (le chemin depend des OU)
+	#on construit le chemin de celle qui nous intÃ©resse ici (le chemin depend des OU)
     $list = $user.DistinguishedName -split ','
     for($i=5;$i -lt ($list.Count) ;$i++){
         $add = $list[-$i].Substring(3,$list[-$i].Length-3)
@@ -69,7 +71,7 @@ foreach ($user in $users)
     }
     $path += $userName + ".xml"
 
-	#si le fichier existe bien on modifie la ligne FaxNumber en consequence. Si la ligne n'existe pas on la créer
+	#si le fichier existe bien on modifie la ligne FaxNumber en consequence. Si la ligne n'existe pas on la crÃ©er
     if(Test-Path $path){
         $xmlContent = Get-Content -Path $path -Raw -Encoding UTF8
         if($xmlContent -Match '(<FaxNumber>[\s\S]*</FaxNumber>)')
@@ -80,24 +82,24 @@ foreach ($user in $users)
         {
             $xmlContent = $xmlContent -replace "</UserId>", "</UserId>`r`n<FaxNumber>$copieur</FaxNumber>"
         }
-		#on réécrit dans le fichier
+		#on rÃ©Ã©crit dans le fichier
         Set-Content -Path $path -Value $xmlContent -Encoding UTF8
     }
-	#fin de partie dédié a KOXO
+	#fin de partie dÃ©diÃ© a KOXO
 	
-	#on va ensuite créer un dossier pour chaque utilisateur pour qu'ils récupère leur scans sur le réseau
-	#on récupère l'username pour créer le chemin complet du dossier scan
+	#on va ensuite crÃ©er un dossier pour chaque utilisateur pour qu'ils rÃ©cupÃ¨re leur scans sur le rÃ©seau
+	#on rÃ©cupÃ¨re l'username pour crÃ©er le chemin complet du dossier scan
     $userName = $user.SamAccountName
 	$totalPath = $scanPath + $userName
     if(!(Test-Path -Path $totalPath)){
-		#on créer le dossier
+		#on crÃ©er le dossier
         $folder = New-Item $totalPath -ItemType Directory
 		
 		#on commence par mettre tous les droits
         $perms =  "domain\$userName", 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow'
         $AclObj = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $perms
 
-		#on récupère les droits du dossier pour les modifier
+		#on rÃ©cupÃ¨re les droits du dossier pour les modifier
         $Acl = Get-Acl $folder.FullName
         $Acl.SetAccessRuleProtection($true,$true)
         $Acl.SetAccessRule($AclObj)
@@ -110,16 +112,16 @@ foreach ($user in $users)
         $Acl.RemoveAccessRule($precise2)
         $Acl.RemoveAccessRule($precise3)
 
-		#enfin on édite les droits effectifs du dossier en conséquence
+		#enfin on Ã©dite les droits effectifs du dossier en consÃ©quence
         Set-Acl -Path $folder.FullName -AclObject $Acl
     }
 }
 
-#on va ensuite procéder a un nettoyage des dossier scans dans le cas où l'utilisateur n'existe plus
+#on va ensuite procÃ©der a un nettoyage des dossier scans dans le cas oÃ¹ l'utilisateur n'existe plus
 #on liste les dossiers
 $listScan = dir -Path $scanPath -Directory
 
-#pour chaque dossier on vérifie si l'utilisateur existe encore.
+#pour chaque dossier on vÃ©rifie si l'utilisateur existe encore.
 #si non, on supprimer le dossier
 foreach ($folder in $listScan)
 {
