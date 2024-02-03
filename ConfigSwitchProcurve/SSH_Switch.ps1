@@ -1,4 +1,6 @@
-#On récupère la liste d'ip de switch (1 par ligne)
+#PanRem 03/02/2024
+
+#On rÃ©cupÃ¨re la liste d'ip de switch (1 par ligne)
 $iplist = Get-Content -Path ip.txt
 
 foreach($ip in $iplist){
@@ -21,7 +23,7 @@ foreach($ip in $iplist){
 	$writer.Flush()
 	Start-Sleep -Seconds 3
 	
-	#on commande la définition du mot de passe op
+	#on commande la dÃ©finition du mot de passe op
 	$writer.WriteLine("password operator")
 	$writer.Flush()
 	Start-Sleep -Seconds 3
@@ -36,7 +38,7 @@ foreach($ip in $iplist){
 	$writer.Flush()
 	Start-Sleep -Seconds 3
 	
-	#on créer la clef pour le ssh
+	#on crÃ©er la clef pour le ssh
 	$writer.WriteLine("crypto key generate ssh")
 	$writer.Flush()
 	Start-Sleep -Seconds 3
@@ -46,13 +48,13 @@ foreach($ip in $iplist){
 	$writer.Flush()
 	Start-Sleep -Seconds 3
 	
-	#on défini le port personalisé du ssh
+	#on dÃ©fini le port personalisÃ© du ssh
 	$writer.WriteLine("ip ssh port 2180")
 	$writer.Flush()
 	Start-Sleep -Seconds 3
 	
 	#on coupe le telnet
-	$writer.WriteLine("no telnet–server")
+	$writer.WriteLine("no telnetâ€“server")
 	$writer.Flush()
 	Start-Sleep -Seconds 3
 
