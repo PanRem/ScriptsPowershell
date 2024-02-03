@@ -1,4 +1,6 @@
-#Définition des paramètres
+#PanRem 03/02/2024
+
+#DÃ©finition des paramÃ¨tres
 [CmdletBinding()]
 param (
     [Parameter(
@@ -8,15 +10,15 @@ param (
     [string] $Path =  $PSScriptRoot + "\group.csv"
     )
 	
-#Déclaration du fichier de log
+#DÃ©claration du fichier de log
 $logFile = "GroupLogs_{0:dd-MM-yyyy_HH\Hmm}.log" -f (Get-Date)
 
-#récupération des données du csv
+#rÃ©cupÃ©ration des donnÃ©es du csv
 Import-Csv $path -Delimiter ";" | Foreach-Object { 
 
     foreach ($property in $_.PSObject.Properties)
     {
-		# traitement de l'id user (1ère colonne du csv)
+		# traitement de l'id user (1Ã¨re colonne du csv)
         if($property.Name -eq "id")
         {
             $name = $property.Value
@@ -38,11 +40,11 @@ Import-Csv $path -Delimiter ";" | Foreach-Object {
         }
         else
         {
-			#ajout des différents groupe (autres colonnes du csv)
+			#ajout des diffÃ©rents groupe (autres colonnes du csv)
             if($property.Value -and $user)
             {
                 Add-ADGroupMember -Identity $property.Value -Members $user
-                "$name ajouté à $($property.Value)" | Out-File -FilePath $LogFile -Append
+                "$name ajoutÃ© Ã  $($property.Value)" | Out-File -FilePath $LogFile -Append
             }
         }
     } 
