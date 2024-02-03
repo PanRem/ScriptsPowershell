@@ -1,8 +1,10 @@
-#récupération de tous les usernames de l'AD
+#PanRem 03/02/2024
+
+#rÃ©cupÃ©ration de tous les usernames de l'AD
 $users = Get-ADUser -filter '*' | Select -Property 'SamAccountName'
 $count = 0
 
-#création de dossier pour chaque user
+#crÃ©ation de dossier pour chaque user
 foreach ($user in $users.SamAccountName)
 {
 	$path = "\\Emplacement\reseau\partage$\$user"
@@ -13,7 +15,7 @@ foreach ($user in $users.SamAccountName)
         #on commence par mettre tous les droits
         $perms =  "domain\$user", 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow'
         $AclObj = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $perms
-		#on récupère les droits du dossier pour les modifier
+		#on rÃ©cupÃ¨re les droits du dossier pour les modifier
         $Acl = Get-Acl $folder.FullName
         $Acl.SetAccessRuleProtection($true,$true)
         $Acl.SetAccessRule($AclObj)
@@ -25,11 +27,11 @@ foreach ($user in $users.SamAccountName)
         $ACL.RemoveAccessRule($precise1)
         $ACL.RemoveAccessRule($precise2)
         $ACL.RemoveAccessRule($precise3)
-		#enfin on édite les droits effectifs du dossier en conséquence
+		#enfin on Ã©dite les droits effectifs du dossier en consÃ©quence
         Set-Acl -Path $folder.FullName -AclObject $Acl
-        Write-Host "Dossier $user créé"
+        Write-Host "Dossier $user crÃ©Ã©"
         $count++
     }
 }
-Write-Host "$count dossiers créés"
+Write-Host "$count dossiers crÃ©Ã©s"
 Read-Host -Prompt "Press enter to quit..."
