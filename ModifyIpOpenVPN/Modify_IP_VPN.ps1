@@ -1,3 +1,5 @@
+#PanRem 03/02/2024
+
 #on définie le path du dossier de config OpenVpn GUI
 $path = "$($env:USERPROFILE)\OpenVPN\config"
 $file = '.\config.ovpn'
