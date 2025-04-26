@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<User>
+<Title>M.</Title>
+<Name>DOE</Name>
+<FirstName>John</FirstName>
+<UserId>jdoe</UserId>
+<FaxNumber>00888</FaxNumber>
+<Password>[PasswordHash]</Password>
+<UniqueID>FPOZTEGGDFZEDDZRGDZEFS</UniqueID>
+<MsExchangeMailbox>0</MsExchangeMailbox>
+<EnableDiskQuota>1</EnableDiskQuota>
+<DiskQuota>256000</DiskQuota>
+<EnableFolderQuota>0</EnableFolderQuota>
+<FolderQuota>5120</FolderQuota>
+<AccountDisabled>0</AccountDisabled>
+<CreationDate>1662027435</CreationDate><!-- French date : 01/09/2022 English date : 9/1/2022 -->
+<ModificationDate>1701270565</ModificationDate><!-- French date : 29/11/2023 English date : 11/29/2023 -->
+<UserCannotChangePassword>0</UserCannotChangePassword>
+<PasswordNeverExpires>0</PasswordNeverExpires>
+<SmartCardRequired>0</SmartCardRequired>
+<ProfileType>1</ProfileType>
+<AllowRDS>1</AllowRDS>
+<RDSProfileType>0</RDSProfileType>
+<AllowCommunications>0</AllowCommunications>
+<AllowDialin>0</AllowDialin>
+
+[...]
+
+</User>
